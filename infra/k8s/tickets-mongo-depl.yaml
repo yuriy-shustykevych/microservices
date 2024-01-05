@@ -12,9 +12,16 @@ spec:
       labels:
         app: tickets-mongo
     spec:
+      volumes:
+        - name: tickets-mongo-storage
+          persistentVolumeClaim:
+            claimName: tickets-mongo-volume-claim
       containers:
         - name: tickets-mongo
           image: mongo
+          volumeMounts:
+            - mountPath: "/data/db/"
+              name: tickets-mongo-storage
 ---
 apiVersion: v1
 kind: Service
@@ -28,4 +35,29 @@ spec:
       port: 27017
       targetPort: 27017
       name: db
-
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tickets-mongo-volume-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
+#---
+#apiVersion: v1
+#kind: PersistentVolume
+#metadata:
+#  name: mongo-pv
+#  labels:
+#    type: local
+#spec:
+#  storageClassName: mongo
+#  capacity:
+#    storage: 1Gi
+#  accessModes:
+#    - ReadWriteOnce
+#  hostPath:
+#    path: "/data/db"
