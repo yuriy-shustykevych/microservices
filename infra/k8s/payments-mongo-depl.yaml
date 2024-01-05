@@ -12,9 +12,16 @@ spec:
       labels:
         app: payments-mongo
     spec:
+      volumes:
+        - name: payments-mongo-storage
+          persistentVolumeClaim:
+            claimName: payments-mongo-volume-claim
       containers:
         - name: payments-mongo
           image: mongo
+          volumeMounts:
+            - mountPath: "/data/db/"
+              name: payments-mongo-storage
 ---
 apiVersion: v1
 kind: Service
@@ -28,4 +35,14 @@ spec:
       port: 27017
       targetPort: 27017
       name: db
-
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: payments-mongo-volume-claim
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 1Gi
