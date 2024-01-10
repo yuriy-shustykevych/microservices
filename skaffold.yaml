@@ -3,6 +3,7 @@ kind: Config
 manifests:
   rawYaml:
     - ./infra/k8s/*
+    - ./infra/k8s-dev/*
 build:
   local:
     push: false
@@ -55,19 +56,4 @@ build:
         manual:
           - src: 'src/**/*.ts'
             dest: .
-#    - image: yuriyshust/moderation
-#      context: moderation
-#      docker:
-#        dockerfile: Dockerfile
-#      sync:
-#        manual:
-#          - src: '*.js'
-#            dest: .
-#    - image: yuriyshust/query
-#      context: query
-#      docker:
-#        dockerfile: Dockerfile
-#      sync:
-#        manual:
-#          - src: '*.js'
-#            dest: .
+
